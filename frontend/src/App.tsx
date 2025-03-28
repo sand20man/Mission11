@@ -1,10 +1,10 @@
 import './App.css';
-import BookCollection from './bookcollection';
+import BookPage from './pages/BookPage';
 
 function App() {
   return (
     <>
-      <BookCollection />
+      <BookPage />
     </>
   );
 }
