@@ -100,7 +100,10 @@ const BookList = () => {
                       <strong>ISBN:</strong> {book.isbn}
                     </li>
                     <li className="list-group-item">
-                      <strong>Genre:</strong> {book.classification}
+                      <strong>Classification:</strong> {book.classification}
+                    </li>
+                    <li className="list-group-item">
+                      <strong>Category:</strong> {book.category}
                     </li>
                     <li className="list-group-item">
                       <strong>Pages:</strong> {book.pageCount}
