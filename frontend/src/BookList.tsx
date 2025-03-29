@@ -2,35 +2,30 @@ import { useEffect, useState } from 'react';
 import { Book } from './types/books';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-const BookList = () => {
+const BookList = ({ selectedCategories }: { selectedCategories: string[] }) => {
   const [books, setBooks] = useState<Book[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [booksPerPage, setBooksPerPage] = useState(5);
-  const [sortDescending, setSortDescending] = useState(false); // Track sort state
+  const [sortDescending, setSortDescending] = useState(false);
 
-  // Function to fetch books with sorting
+  // Move fetchBooks outside of useEffect
   const fetchBooks = async (sortBy = 'name', descending = false) => {
-    try {
-      const response = await fetch(
-        `https://localhost:5000/Book/BookCollection?sortBy=${sortBy}&descending=${descending}`
-      );
-      if (!response.ok) throw new Error('Failed to fetch books');
-      const data = await response.json();
-      setBooks(data);
-    } catch (error) {
-      console.error('Error fetching books:', error);
-    }
+    const categoryParams = selectedCategories
+      .map((cat) => `category=${encodeURIComponent(cat)}`)
+      .join('&');
+
+    const response = await fetch(
+      `https://localhost:5000/Book/BookCollection?sortBy=${sortBy}&descending=${descending}${selectedCategories.length ? `&${categoryParams}` : ''}`
+    );
+    const data = await response.json();
+    setBooks(data.books);
+    setCurrentPage(1);
   };
 
+  // Effect to fetch books when dependencies change
   useEffect(() => {
-    fetchBooks();
-  }, []);
-
-  useEffect(() => {
-    if (currentPage > Math.ceil(books.length / booksPerPage)) {
-      setCurrentPage(1);
-    }
-  }, [books, booksPerPage, currentPage]);
+    fetchBooks('name', sortDescending);
+  }, [sortDescending, booksPerPage, selectedCategories]);
 
   // Pagination logic
   const indexOfLastBook = currentPage * booksPerPage;
@@ -40,16 +35,13 @@ const BookList = () => {
   // Change page
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
-  // Toggle sort order and fetch books again
+  // Toggle sort order - just update the state, useEffect will handle the fetch
   const handleSort = () => {
     setSortDescending((prev) => !prev);
-    fetchBooks('name', !sortDescending);
   };
 
   return (
     <div className="container mt-4">
-      <h1 className="text-center mb-4">📚 Book Collection</h1>
-
       <div className="mb-3 text-center">
         <label className="me-2 fw-bold">Books per page:</label>
         <select
@@ -89,10 +81,7 @@ const BookList = () => {
                   <p className="text-muted mb-2">
                     by <strong>{book.author}</strong>
                   </p>
-                  <ul
-                    className="list-group list-group-flush w-100"
-                    style={{ display: 'block' }}
-                  >
+                  <ul className="list-group list-group-flush w-100">
                     <li className="list-group-item">
                       <strong>Publisher:</strong> {book.publisher}
                     </li>
