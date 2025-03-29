@@ -2,9 +2,8 @@ import CategoryFilter from '../components/CategoryFilter';
 import BookCollection from '../components/BookList';
 import WelcomeBand from '../components/WelcomeBand';
 import { useState } from 'react';
-import "bootstrap/dist/css/bootstrap.min.css";
-import "bootstrap/dist/js/bootstrap.bundle.min.js"; // Required for toast functionality
-
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.bundle.min.js'; // Required for toast functionality
 
 function BooksPage() {
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);

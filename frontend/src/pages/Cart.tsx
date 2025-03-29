@@ -4,7 +4,14 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { useCart } from '../components/CartContext';
 
 const Cart: React.FC = () => {
-  const { cartItems, updateQuantity, removeFromCart, clearCart, total, lastViewedPage } = useCart();
+  const {
+    cartItems,
+    updateQuantity,
+    removeFromCart,
+    clearCart,
+    total,
+    lastViewedPage,
+  } = useCart();
   const navigate = useNavigate();
 
   const handleContinueShopping = () => {
@@ -22,9 +29,9 @@ const Cart: React.FC = () => {
         <div className="text-center">
           <h2>Your Cart is Empty</h2>
           <p className="lead">Add some books to get started!</p>
-          <button 
+          <button
             className="btn btn-primary mt-3"
-            onClick={() => navigate('/')}  // Direct navigation to home page
+            onClick={() => navigate('/')} // Direct navigation to home page
           >
             Continue Shopping
           </button>
@@ -36,7 +43,7 @@ const Cart: React.FC = () => {
   return (
     <div className="container mt-4">
       <h2 className="mb-4">Your Shopping Cart</h2>
-      
+
       <div className="table-responsive">
         <table className="table table-striped table-hover">
           <thead className="table-dark">
@@ -51,29 +58,33 @@ const Cart: React.FC = () => {
           <tbody>
             {cartItems.map((item) => {
               const subtotal = item.book.price * item.quantity;
-              
+
               return (
                 <tr key={item.book.bookId}>
                   <td>
                     <div className="d-flex align-items-center">
                       <div>
                         <h5 className="mb-0">{item.book.title}</h5>
-                        <small className="text-muted">by {item.book.author}</small>
+                        <small className="text-muted">
+                          by {item.book.author}
+                        </small>
                       </div>
                     </div>
                   </td>
                   <td>${item.book.price.toFixed(2)}</td>
                   <td>
-                    <div className="input-group" style={{ maxWidth: "120px" }}>
-                      <button 
+                    <div className="input-group" style={{ maxWidth: '120px' }}>
+                      <button
                         className="btn btn-outline-secondary"
-                        onClick={() => updateQuantity(item.book.bookId, item.quantity - 1)}
+                        onClick={() =>
+                          updateQuantity(item.book.bookId, item.quantity - 1)
+                        }
                         disabled={item.quantity <= 1}
                       >
                         -
                       </button>
-                      <input 
-                        type="number" 
+                      <input
+                        type="number"
                         className="form-control text-center"
                         value={item.quantity}
                         onChange={(e) => {
@@ -84,9 +95,11 @@ const Cart: React.FC = () => {
                         }}
                         min="1"
                       />
-                      <button 
+                      <button
                         className="btn btn-outline-secondary"
-                        onClick={() => updateQuantity(item.book.bookId, item.quantity + 1)}
+                        onClick={() =>
+                          updateQuantity(item.book.bookId, item.quantity + 1)
+                        }
                       >
                         +
                       </button>
@@ -94,7 +107,7 @@ const Cart: React.FC = () => {
                   </td>
                   <td>${subtotal.toFixed(2)}</td>
                   <td>
-                    <button 
+                    <button
                       className="btn btn-danger btn-sm"
                       onClick={() => removeFromCart(item.book.bookId)}
                     >
@@ -107,26 +120,25 @@ const Cart: React.FC = () => {
           </tbody>
           <tfoot>
             <tr>
-              <td colSpan={3} className="text-end fw-bold">Total:</td>
+              <td colSpan={3} className="text-end fw-bold">
+                Total:
+              </td>
               <td className="fw-bold">${total.toFixed(2)}</td>
               <td></td>
             </tr>
           </tfoot>
         </table>
       </div>
-      
+
       <div className="d-flex justify-content-between mt-4">
         <div>
-          <button 
+          <button
             className="btn btn-primary me-2"
             onClick={handleContinueShopping}
           >
             Continue Shopping
           </button>
-          <button 
-            className="btn btn-outline-danger"
-            onClick={clearCart}
-          >
+          <button className="btn btn-outline-danger" onClick={clearCart}>
             Clear Cart
           </button>
         </div>

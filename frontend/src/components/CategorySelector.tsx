@@ -5,9 +5,9 @@ interface CategorySelectorProps {
   selectedCategories: string[];
 }
 
-const CategorySelector: React.FC<CategorySelectorProps> = ({ 
-  onCategoryChange, 
-  selectedCategories 
+const CategorySelector: React.FC<CategorySelectorProps> = ({
+  onCategoryChange,
+  selectedCategories,
 }) => {
   const [categories, setCategories] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
@@ -17,12 +17,14 @@ const CategorySelector: React.FC<CategorySelectorProps> = ({
     const fetchCategories = async () => {
       try {
         setLoading(true);
-        const response = await fetch('https://localhost:5000/Book/GetBooksByCategory');
-        
+        const response = await fetch(
+          'https://localhost:5000/Book/GetBooksByCategory'
+        );
+
         if (!response.ok) {
           throw new Error('Failed to fetch categories');
         }
-        
+
         const data = await response.json();
         setCategories(data);
         setError(null);
@@ -39,14 +41,18 @@ const CategorySelector: React.FC<CategorySelectorProps> = ({
 
   const handleCategoryToggle = (category: string) => {
     if (selectedCategories.includes(category)) {
-      onCategoryChange(selectedCategories.filter(c => c !== category));
+      onCategoryChange(selectedCategories.filter((c) => c !== category));
     } else {
       onCategoryChange([...selectedCategories, category]);
     }
   };
 
   if (loading) {
-    return <div className="card p-3 mb-4"><p>Loading categories...</p></div>;
+    return (
+      <div className="card p-3 mb-4">
+        <p>Loading categories...</p>
+      </div>
+    );
   }
 
   if (error) {
@@ -63,7 +69,7 @@ const CategorySelector: React.FC<CategorySelectorProps> = ({
           <p>No categories available</p>
         ) : (
           <div className="d-flex flex-column">
-            {categories.map(category => (
+            {categories.map((category) => (
               <div className="form-check mb-2" key={category}>
                 <input
                   className="form-check-input"
@@ -72,7 +78,10 @@ const CategorySelector: React.FC<CategorySelectorProps> = ({
                   checked={selectedCategories.includes(category)}
                   onChange={() => handleCategoryToggle(category)}
                 />
-                <label className="form-check-label" htmlFor={`category-${category}`}>
+                <label
+                  className="form-check-label"
+                  htmlFor={`category-${category}`}
+                >
                   {category}
                 </label>
               </div>
@@ -82,7 +91,7 @@ const CategorySelector: React.FC<CategorySelectorProps> = ({
       </div>
       {selectedCategories.length > 0 && (
         <div className="card-footer">
-          <button 
+          <button
             className="btn btn-outline-secondary btn-sm"
             onClick={() => onCategoryChange([])}
           >
