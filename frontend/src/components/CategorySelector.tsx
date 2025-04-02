@@ -18,7 +18,7 @@ const CategorySelector: React.FC<CategorySelectorProps> = ({
       try {
         setLoading(true);
         const response = await fetch(
-          'https://localhost:5000/Book/GetBooksByCategory'
+          'https://colemanmission13backend.azurewebsites.net/Book/GetBooksByCategory'
         );
 
         if (!response.ok) {
