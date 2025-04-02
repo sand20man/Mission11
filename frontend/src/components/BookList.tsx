@@ -5,6 +5,7 @@ import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import { Toast } from 'bootstrap';
 import { Book } from '../types/books';
 import CartSummary from '../pages/CartSummary';
+import { fetchBooks } from '../api/Booksapi';
 
 // I ADDED TOAST NOTIFICATIONS THROUGH BOOTSTRAP
 // I ALSO ADDED A BOOK CAROUSEL
@@ -14,36 +15,33 @@ const BookList = ({ selectedCategories }: { selectedCategories: string[] }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [booksPerPage, setBooksPerPage] = useState(5);
   const [sortDescending, setSortDescending] = useState(false);
-  const [loading, setLoading] = useState(false);
   const [addingToCart, setAddingToCart] = useState<{ [key: number]: boolean }>(
     {}
   );
   const { addToCart, setLastViewedPage } = useCart();
   const toastRef = useRef<HTMLDivElement>(null);
-
-  const fetchBooks = async (sortBy = 'name', descending = false) => {
-    setLoading(true);
-    try {
-      const categoryParams = selectedCategories
-        .map((cat) => `category=${encodeURIComponent(cat)}`)
-        .join('&');
-
-      const response = await fetch(
-        `https://localhost:5000/Book/BookCollection?sortBy=${sortBy}&descending=${descending}${selectedCategories.length ? `&${categoryParams}` : ''}`
-      );
-      const data = await response.json();
-      setBooks(data.books);
-      setCurrentPage(1);
-    } catch (error) {
-      console.error('Error fetching books:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    fetchBooks('name', sortDescending);
-  }, [sortDescending, booksPerPage, selectedCategories]);
+    const loadBooks = async (sortBy = 'name', descending = false) => {
+      try {
+        setLoading(true);
+        const data = await fetchBooks(sortBy, descending, selectedCategories);
+        setBooks(data.books);
+        setCurrentPage(1);
+      } catch (error) {
+        console.error('Error fetching books:', error);
+        setError('Failed to fetch books.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadBooks('name', sortDescending);
+  }, [sortDescending, booksPerPage, selectedCategories]); // Dependency array
+  if (loading) return <p>Loading Books...</p>;
+  if (error) return <p className="text-danger">{error}</p>;
 
   const indexOfLastBook = currentPage * booksPerPage;
   const indexOfFirstBook = indexOfLastBook - booksPerPage;
@@ -83,7 +81,6 @@ const BookList = ({ selectedCategories }: { selectedCategories: string[] }) => {
   return (
     <div className="container mt-4">
       <CartSummary />
-
       <div className="mb-3 text-center">
         <label className="me-2 fw-bold">Books per page:</label>
         <select

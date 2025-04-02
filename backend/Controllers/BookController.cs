@@ -31,30 +31,30 @@ namespace Mission11.API.Controllers
                 {
                     case "name":
                     case "title":
-                        query = descending 
-                            ? query.OrderByDescending(b => b.Title) 
+                        query = descending
+                            ? query.OrderByDescending(b => b.Title)
                             : query.OrderBy(b => b.Title);
                         break;
                     case "author":
-                        query = descending 
-                            ? query.OrderByDescending(b => b.Author) 
+                        query = descending
+                            ? query.OrderByDescending(b => b.Author)
                             : query.OrderBy(b => b.Author);
                         break;
                     case "price":
-                        query = descending 
-                            ? query.OrderByDescending(b => b.Price) 
+                        query = descending
+                            ? query.OrderByDescending(b => b.Price)
                             : query.OrderBy(b => b.Price);
                         break;
                     default:
-                        query = descending 
-                            ? query.OrderByDescending(b => b.Title) 
+                        query = descending
+                            ? query.OrderByDescending(b => b.Title)
                             : query.OrderBy(b => b.Title);
                         break;
                 }
             }
 
             var books = query.ToList();
-            
+
             return Ok(new { books });
         }
 
@@ -68,6 +68,50 @@ namespace Mission11.API.Controllers
                 .ToList();
 
             return Ok(categories);
+        }
+
+        [HttpPost("AddBook")]
+        public IActionResult AddBook([FromBody] Book newbook)
+        {
+            _bookContext.Books.Add(newbook);
+            _bookContext.SaveChanges();
+            return Ok(newbook);
+        }
+
+        [HttpPut("UpdateBook/{bookId}")]
+        public IActionResult UpdateBook(int bookId, [FromBody] Book updatedBook)
+        {
+            var existingBook = _bookContext.Books.Find(bookId);
+
+            existingBook.Title = updatedBook.Title;
+            existingBook.Author = updatedBook.Author;
+            existingBook.Publisher = updatedBook.Publisher;
+            existingBook.Isbn = updatedBook.Isbn;
+            existingBook.Classification = updatedBook.Classification;
+            existingBook.Category = updatedBook.Category;
+            existingBook.PageCount = updatedBook.PageCount;
+            existingBook.Price = updatedBook.Price;
+
+
+            _bookContext.Books.Update(existingBook);
+            _bookContext.SaveChanges();
+
+            return Ok(existingBook);
+        }
+
+        [HttpDelete("DeleteBook/{bookId}")]
+        public IActionResult DeleteBook(int bookId)
+        {
+            var book = _bookContext.Books.Find(bookId);
+            if (book == null)
+            {
+                return NotFound(new { message = "Book not found" });
+            }
+
+            _bookContext.Books.Remove(book);
+            _bookContext.SaveChanges();
+
+            return NoContent();
         }
     }
 }

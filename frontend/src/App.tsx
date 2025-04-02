@@ -7,6 +7,7 @@ import CategorySelector from './components/CategorySelector';
 import Cart from './pages/Cart';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+import AdminBooks from './pages/AdminBooks';
 
 const App: React.FC = () => {
   // State for selected categories (filtering books based on category)
@@ -152,6 +153,7 @@ const App: React.FC = () => {
               />
               {/* Cart route */}
               <Route path="/cart" element={<Cart />} />
+              <Route path="/adminbooks" element={<AdminBooks />} />
             </Routes>
           </div>
         </div>
