@@ -1,0 +1,4 @@
+{
+  "appService.defaultWebAppToDeploy": "undefined/subscriptions/ad6214c7-a817-47ab-bb0b-f97e29802d94/resourceGroups/appsvc_windows_centralus/providers/Microsoft.Web/sites/colemanMission13backend",
+  "appService.deploySubpath": "backend/publish"
+}

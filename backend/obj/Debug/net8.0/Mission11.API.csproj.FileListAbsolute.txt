@@ -157,3 +157,4 @@
 /Users/colemansandy/Desktop/BYU/JuniorCore/413/Mission11/backend/obj/Debug/net8.0/Mission11.API.genruntimeconfig.cache
 /Users/colemansandy/Desktop/BYU/JuniorCore/413/Mission11/backend/obj/Debug/net8.0/ref/Mission11.API.dll
 /Users/colemansandy/Desktop/BYU/JuniorCore/413/Mission11/backend/obj/Debug/net8.0/Mission11.API.sourcelink.json
+/Users/colemansandy/Desktop/BYU/JuniorCore/413/Mission11/backend/bin/Debug/net8.0/Bookstore.sqlite
