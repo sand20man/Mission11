@@ -5,7 +5,7 @@ interface FetchBooksResponse {
   totalBooks: number;
 }
 
-const API_URL = 'https://localhost:5000/Book';
+const API_URL = 'https://colemanmission13backend.azurewebsites.net/Book';
 
 export const fetchBooks = async (
   sortBy: string,
