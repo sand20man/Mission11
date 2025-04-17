@@ -11,3 +11,5 @@ ogj/
 
 *.log
 *.tlog
+
+appsettings.json
